@@ -95,9 +95,14 @@ class Database_Handler:
         connection = mysql.connector.connect(**self.config)
         cursor = connection.cursor()
 
-        # Execute SQL query to search for videos based on title and description
-        sql_query = f"SELECT * FROM videos WHERE title LIKE '%{title_query}%' AND description LIKE '%{description_query}%';"
-        cursor.execute(sql_query)
+        # Construct SQL query with wildcard characters for partial matching
+        sql_query = "SELECT * FROM videos WHERE title LIKE %s OR description LIKE %s"
+        params = ('%' + title_query + '%', '%' + description_query + '%') if title_query and description_query else \
+                 ('%' + title_query + '%', '%' + title_query + '%') if title_query else \
+                 ('%' + description_query + '%', '%' + description_query + '%')
+        
+        # Execute SQL query
+        cursor.execute(sql_query, params)
 
         # Fetch data
         video_data = cursor.fetchall()

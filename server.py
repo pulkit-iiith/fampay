@@ -23,13 +23,13 @@ def search():
     title_query = request.args.get('title')
     description_query = request.args.get('description')
 
-    if title_query and description_query:
+    if title_query or description_query:
         service = Service()
         response = service.search_videos(title_query,description_query)
         return jsonify(response)
 
     else:
-        return jsonify({'error': 'Both title and description query parameters are required'}), 400
+        return jsonify({'error': 'At least one of title or description query parameters is required'}), 400
 
 
 class KeysExhaustedError(Exception):
