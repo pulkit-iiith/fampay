@@ -73,9 +73,10 @@ async def fetch_data():
             else:
                 # Log an error if the request was not successful
                 print("Failed to fetch data from YouTube API")
-        except requests.exceptions.ConnectionError:
+        except (requests.exceptions.ConnectionError, KeysExhaustedError) as e:
             # Handle connection error and raise custom exception
-            raise KeysExhaustedError("Both API keys are exhausted")
+            print(e)
+            break
 
 
         # Sleep for 10 seconds before making the next request
