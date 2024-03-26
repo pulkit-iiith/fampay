@@ -7,13 +7,13 @@ stores them in a database, and provides endpoints for retrieving and searching t
 
 ## Setup Instructions
 
-
 ### Prerequisites:
 1. Python 3.x
 2. MySQL Server
 
 
 ### Installation
+To run the server and test the API locally, follow these steps:
   1. Clone the repository:
      ```
      git clone https://github.com/yourusername/youtube-video-fetch-api.git
@@ -23,15 +23,22 @@ stores them in a database, and provides endpoints for retrieving and searching t
      ```
      cd youtube-video-fetch-api
      ```
+
+  Now either run in local machine as
      
-  5. Install dependencies:
-     ```
-     pip3 install -r requirements.txt
-     ```
+    Install dependencies:
+       pip3 install -r requirements.txt
      
-  7. Set up MySQL database:
+    Set up MySQL database:
      - Install MySQL server if not already installed.
-     - Create a MySQL database and configure the connection parameters in config.py.
+     - Create a MySQL database and configure the connection parameters in constants.py.
+    
+or we can build and start docker server
+```
+docker-compose up --build
+```
+Once the containers are up and running, you can access the API endpoints.
+
 
 
 ### Usage
@@ -50,12 +57,16 @@ stores them in a database, and provides endpoints for retrieving and searching t
       - Endpoint: /videos
       - Method: GET
       - Parameters:
+    
+        
             - page (optional): Page number for pagination (default: 1)
             - per_page (optional): Number of videos per page (default: 10)
   2. Search Videos
-      - Endpoint: /videos
+      - Endpoint: /search
       - Method: GET
       - Parameters:
+    
+        
             - title (optional): Search query for video title
             - description (optional): Search query for video description
    
