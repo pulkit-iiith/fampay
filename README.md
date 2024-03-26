@@ -16,12 +16,12 @@ stores them in a database, and provides endpoints for retrieving and searching t
 To run the server and test the API locally, follow these steps:
   1. Clone the repository:
      ```
-     git clone https://github.com/yourusername/youtube-video-fetch-api.git
+     git clone https://github.com/pulkit-iiith/fampay.git
       ```
      
   3. Navigate to the project directory:
      ```
-     cd youtube-video-fetch-api
+     cd fampay
      ```
 
   Now either run in local machine as
