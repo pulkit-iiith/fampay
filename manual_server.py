@@ -40,7 +40,7 @@ def get_videos():
     return jsonify(response)
 
 @app.route('/search', methods=['GET'])
-def search():
+def search_videos():
     # Get search queries from request parameters
     title_query = request.args.get('title')
     description_query = request.args.get('description')
