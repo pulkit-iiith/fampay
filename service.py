@@ -3,7 +3,7 @@ from datetime import datetime
 
 
 class Service:
-    def trigger_processing(self,data):
+    def preprocess_data_and_insert(self,data):
 
         # Extract required information
         videos = []

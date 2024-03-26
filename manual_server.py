@@ -7,9 +7,10 @@ app = Flask(__name__)
 
 @app.route('/', methods=['POST'])
 def some_endpoint():
+
     # Make a request to a specific endpoint of the third-party API
     params = {
-            'key': constants.API_KEY,
+            'key': constants.BACK_UP_API_KEY,
             'q': constants.Query, 
             'part': constants.Snippet,
         }
@@ -20,7 +21,7 @@ def some_endpoint():
         # Parse the response data and extract relevant information
         data = response.json()
         service = Service()
-        service.trigger_processing(data)
+        service.preprocess_data_and_insert(data)
 
         return jsonify(data)
     else:

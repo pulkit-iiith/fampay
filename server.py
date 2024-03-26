@@ -32,27 +32,51 @@ def search():
         return jsonify({'error': 'Both title and description query parameters are required'}), 400
 
 
+class KeysExhaustedError(Exception):
+    pass
+
 async def fetch_data():
+
+    primary_key = constants.API_KEY
+    backup_key = constants.BACK_UP_API_KEY
+    current_key = primary_key  # Start with the primary key
+
     while True:
         params = {
-            'key': constants.API_KEY,
+            'key': current_key,
             'q': constants.Query, 
             'part': constants.Snippet,
         }
+        url = constants.THIRD_PARTY_API_BASE_URL
         # Make a request to the YouTube API
-        response = requests.get(constants.THIRD_PARTY_API_BASE_URL,params=params)
+        response = requests.get(url,params=params)
 
-        # Check if the request was successful
-        if response.status_code == 200:
-            # Parse the response data and extract relevant information
-            data = response.json()
-            service = Service()
-            service.trigger_processing(data)
-            # Process the data as needed
-            print("Data fetched successfully:")
-        else:
-            # Log an error if the request was not successful
-            print("Failed to fetch data from YouTube API")
+        try:
+            # Make a request to the YouTube API
+            response = requests.get(url, params=params)
+
+            # Check if the request was successful
+            if response.status_code == 200:
+                # Parse the response data and extract relevant information
+                data = response.json()
+                service = Service()
+                service.preprocess_data_and_insert(data)
+                # Process the data as needed
+                print("Data fetched successfully:")
+            elif response.status_code == 403 and current_key == primary_key:
+                # If primary key is exhausted, switch to backup key
+                print("Primary API key exhausted, switching to backup key")
+                current_key = backup_key
+            elif response.status_code == 403 and current_key == backup_key:
+                # If backup key is also exhausted, raise custom exception
+                raise KeysExhaustedError("Both API keys are exhausted")
+            else:
+                # Log an error if the request was not successful
+                print("Failed to fetch data from YouTube API")
+        except requests.exceptions.ConnectionError:
+            # Handle connection error and raise custom exception
+            raise KeysExhaustedError("Both API keys are exhausted")
+
 
         # Sleep for 10 seconds before making the next request
         await asyncio.sleep(10)
