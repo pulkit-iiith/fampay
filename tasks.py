@@ -1,23 +1,27 @@
 import requests
-from data_preprocessing import Data_preprocessing
 from service import Service
+import constants
 from flask import Flask, jsonify, request
 app = Flask(__name__)
 
-THIRD_PARTY_API_BASE_URL = 'https://www.googleapis.com/youtube/v3/search?key=AIzaSyCk_JQ8qohmT6uoucQQ4o7ULktfYSor9wc&q=modi&part=snippet'
 
 @app.route('/', methods=['POST'])
 def some_endpoint():
     # Make a request to a specific endpoint of the third-party API
-    response = requests.get(THIRD_PARTY_API_BASE_URL)
+    params = {
+            'key': constants.API_KEY,
+            'q': constants.Query, 
+            'part': constants.Snippet,
+        }
+    response = requests.get(constants.THIRD_PARTY_API_BASE_URL,params=params)
 
     # Check if the request was successful
     if response.status_code == 200:
         # Parse the response data and extract relevant information
         data = response.json()
-        data_preprocess = Data_preprocessing()
-        data_preprocess.trigger_processing(data)
-        # Process the data as needed
+        service = Service()
+        service.trigger_processing(data)
+
         return jsonify(data)
     else:
         # Return an error response if the request was not successful

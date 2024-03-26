@@ -1,14 +1,15 @@
 import mysql.connector
 from datetime import datetime
+import constants
 
 
-class Insert_data_in_database:
+class Database_Handler:
     # Define MySQL connection parameters
     config = {
-            'user': 'root',
-            'password': '',
-            'host': 'localhost',
-            'database': 'testDB'
+            'user': constants.Username,
+            'password': constants.Password,
+            'host': constants.Host,
+            'database': constants.DB
         }    
 
     def make_connection_and_insert_data(self,data):
