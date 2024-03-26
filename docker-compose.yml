@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  flask-app:
+    build: .
+    ports:
+     - "5002:5000"
+    volumes:
+     - .:/app
+    depends_on:
+      - mysql
+    environment:
+      - YOUTUBE_API_BASE_URL=https://www.googleapis.com/youtube/v3/search
+      - API_KEY=AIzaSyDbCHoIPZA9e2fNDHCnsvb3MxB9oQ2lGr8
+      - BACKUP_API_KEY=AIzaSyCWwKUkm6ENnEEao3agXpteS9UBWRkv41w
+      - MYSQL_HOST=mysql
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=  # Empty password
+      - MYSQL_DATABASE=test
+
+  mysql:
+    image: mysql:latest
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_DATABASE: test
+    ports:
+      - "3306:3306"
