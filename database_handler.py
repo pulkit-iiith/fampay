@@ -1,15 +1,20 @@
 import mysql.connector
+from dotenv import load_dotenv
+import os
 from datetime import datetime
 import constants
 
 
 class Database_Handler:
     # Define MySQL connection parameters
+    load_dotenv()
     config = {
-            'user': constants.Username,
-            'password': constants.Password,
-            'host': constants.Host,
-            'database': constants.DB
+            'user': os.getenv('MYSQL_USER'),
+            'password': os.getenv('MYSQL_PASSWORD'),
+            'host': os.getenv('MYSQL_HOST'),
+            'database': os.getenv('MYSQL_DATABASE'),
+            'port': os.getenv('MYSQL_PORT', '3306'),
+            'auth_plugin':'mysql_native_password'
         }    
 
     def make_connection_and_insert_data(self,data):

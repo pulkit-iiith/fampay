@@ -4,6 +4,8 @@ from service import Service
 import constants
 from flask import Flask, jsonify, request
 import threading
+import os
+from dotenv import load_dotenv
 app = Flask(__name__)
 
 
@@ -36,9 +38,9 @@ class KeysExhaustedError(Exception):
     pass
 
 async def fetch_data():
-
-    primary_key = constants.API_KEY
-    backup_key = constants.BACK_UP_API_KEY
+    load_dotenv()
+    primary_key = os.getenv('API_KEY')
+    backup_key = os.getenv('BACK_UP_API_KEY')
     current_key = primary_key  # Start with the primary key
 
     while True:
@@ -47,7 +49,7 @@ async def fetch_data():
             'q': constants.Query, 
             'part': constants.Snippet,
         }
-        url = constants.THIRD_PARTY_API_BASE_URL
+        url = os.getenv('THIRD_PARTY_API_BASE_URL')
         # Make a request to the YouTube API
         response = requests.get(url,params=params)
 
