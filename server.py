@@ -1,5 +1,6 @@
 import asyncio
 import requests
+from sqlalchemy.exc import SQLAlchemyError
 from service import Service
 import constants
 from flask import Flask, jsonify, request
@@ -8,30 +9,36 @@ import os
 from dotenv import load_dotenv
 app = Flask(__name__)
 
-
 @app.route('/videos', methods=['GET'])
 def get_videos():
-    # Pagination parameters
-    page = int(request.args.get('page', 1))  # Default to page 1 if not provided
-    per_page = int(request.args.get('per_page', 10))  # Default to 10 videos per page if not provided
-    service = Service()
-    response = service.get_videos(page,per_page)
+    try:
+        # Pagination parameters
+        page = int(request.args.get('page', 1))  # Default to page 1 if not provided
+        per_page = int(request.args.get('per_page', 10))  # Default to 10 videos per page if not provided
+        service = Service()
+        response = service.get_videos(page, per_page)
 
-    return jsonify(response)
+        return jsonify(response)
+    except SQLAlchemyError as e:
+        # Handle database errors
+        return jsonify({'error': 'No Data in Database'}), 500
 
 @app.route('/search', methods=['GET'])
 def search_videos():
-    # Get search queries from request parameters
-    title_query = request.args.get('title')
-    description_query = request.args.get('description')
+    try:
+        # Get search queries from request parameters
+        title_query = request.args.get('title')
+        description_query = request.args.get('description')
 
-    if title_query or description_query:
-        service = Service()
-        response = service.search_videos(title_query,description_query)
-        return jsonify(response)
-
-    else:
-        return jsonify({'error': 'At least one of title or description query parameters is required'}), 400
+        if title_query or description_query:
+            service = Service()
+            response = service.search_videos(title_query, description_query)
+            return jsonify(response)
+        else:
+            return jsonify({'error': 'At least one of title or description query parameters is required'}), 400
+    except SQLAlchemyError as e:
+        # Handle database errors
+        return jsonify({'error': 'No Data in Database'}), 500
 
 
 class KeysExhaustedError(Exception):
@@ -91,6 +98,6 @@ if __name__ == '__main__':
     # Start fetching data in a separate thread
     threading.Thread(target=start_fetch_data, daemon=True).start()
     # Run the Flask application
-    app.run(debug=True, port=5000)
-
+    app.run(debug=True, host='0.0.0.0')
+    #This configuration ensures that the Flask app listens on all available network interfaces (0.0.0.0) on given port 
 
