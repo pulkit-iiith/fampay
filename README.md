@@ -59,7 +59,7 @@ Once the containers are up and running, you can access the API endpoints.
       
       2. Search Videos
       
-      curl 'http://localhost:5001/search?title=your_query_here'
+      curl http://localhost:5001/search?title=your_query_here
 
 ## Updating key and Query:
 
