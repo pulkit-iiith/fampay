@@ -23,33 +23,12 @@ To run the server and test the API locally, follow these steps:
      ```
      cd fampay
      ```
-
-  Now either run in local machine as
-     
-    Install dependencies:
-       pip3 install -r requirements.txt
-     
-    Set up MySQL database:
-     - Install MySQL server if not already installed.
-     - Create a MySQL database and configure the connection parameters in constants.py.
+  3. Build and start docker server:
+     ```
+     docker-compose up -d
+     ```
     
-or we can build and start docker server
-```
-docker-compose up --build
-```
 Once the containers are up and running, you can access the API endpoints.
-
-
-
-### Usage
-  1. Run the server:
-     ```
-     python3 server.py
-     ```
-  3. Access the API endpoints.
-  
-
-
 
 ## API Endpoints:
 
@@ -76,9 +55,53 @@ Once the containers are up and running, you can access the API endpoints.
 
       1. Fetch Latest Videos
       
-      curl http://localhost:5000/videos
+      curl http://localhost:5001/videos
       
       2. Search Videos
       
-      curl 'http://localhost:5000/search?title=your_query_here'
+      curl 'http://localhost:5001/search?title=your_query_here'
+
+## Updating key and Query:
+
+We have a docker-compose.yml file which contains all the environments variables which looks like:-
+```
+version: '3'
+
+services:
+  flask-app:
+    build: .
+    ports:
+     - "5001:5000"
+    volumes:
+     - .:/app
+    depends_on:
+      - mysql
+    environment:
+      - YOUTUBE_API_BASE_URL=https://www.googleapis.com/youtube/v3/search
+      - API_KEY=AIzaSyCWwKUkm6ENnEEao3agXpteS9UBWRkv41w
+      - BACK_UP_API_KEY=AIzaSyB2qJK3vjvKE-Egpbrs0IXFX5A3lMm3MpI
+      - QUERY = modi
+      - MYSQL_HOST=mysql
+      - MYSQL_USER=admin
+      - MYSQL_PASSWORD=admin 
+      - MYSQL_DATABASE=test
+
+  mysql:
+    image: mysql:latest
+    environment:
+      - MYSQL_HOST=mysql
+      - MYSQL_USER=admin
+      - MYSQL_PASSWORD=admin
+      - MYSQL_DATABASE=test
+      - MYSQL_ROOT_PASSWORD=admin
+
+    ports:
+      - "3306:3306"
+
+```
+Here you can change below details accordingly
+- API_KEY=AIzaSyCWwKUkm6ENnEEao3agXpteS9UBWRkv41w
+- BACK_UP_API_KEY=AIzaSyB2qJK3vjvKE-Egpbrs0IXFX5A3lMm3MpI
+- QUERY = modi
+      
   
