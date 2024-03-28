@@ -11,8 +11,9 @@ services:
       - mysql
     environment:
       - YOUTUBE_API_BASE_URL=https://www.googleapis.com/youtube/v3/search
-      - API_KEY=AIzaSyB2qJK3vjvKE-Egpbrs0IXFX5A3lMm3MpI
-      - BACKUP_API_KEY=AIzaSyCWwKUkm6ENnEEao3agXpteS9UBWRkv41w
+      - API_KEY=AIzaSyCWwKUkm6ENnEEao3agXpteS9UBWRkv41w
+      - BACK_UP_API_KEY=AIzaSyB2qJK3vjvKE-Egpbrs0IXFX5A3lMm3MpI
+      - QUERY = modi
       - MYSQL_HOST=mysql
       - MYSQL_USER=admin
       - MYSQL_PASSWORD=admin 

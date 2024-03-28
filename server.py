@@ -1,6 +1,5 @@
 import asyncio
 import requests
-from sqlalchemy.exc import SQLAlchemyError
 from service import Service
 import constants
 from flask import Flask, jsonify, request
@@ -19,9 +18,9 @@ def get_videos():
         response = service.get_videos(page, per_page)
 
         return jsonify(response)
-    except SQLAlchemyError as e:
-        # Handle database errors
-        return jsonify({'error': 'No Data in Database'}), 500
+    except Exception as e:
+        # Handle other unexpected errors
+        return jsonify({'error':str(e)}), 500
 
 @app.route('/search', methods=['GET'])
 def search_videos():
@@ -36,9 +35,9 @@ def search_videos():
             return jsonify(response)
         else:
             return jsonify({'error': 'At least one of title or description query parameters is required'}), 400
-    except SQLAlchemyError as e:
-        # Handle database errors
-        return jsonify({'error': 'No Data in Database'}), 500
+    except Exception as e:
+        # Handle other unexpected errors
+        return jsonify({'error':str(e)}), 500
 
 
 class KeysExhaustedError(Exception):
@@ -48,12 +47,13 @@ async def fetch_data():
     load_dotenv()
     primary_key = os.getenv('API_KEY')
     backup_key = os.getenv('BACK_UP_API_KEY')
+    search_query=os.getenv('QUERY')
     current_key = primary_key  # Start with the primary key
 
     while True:
         params = {
             'key': current_key,
-            'q': constants.Query, 
+            'q': search_query, 
             'part': constants.Snippet,
         }
         url = os.getenv('THIRD_PARTY_API_BASE_URL')

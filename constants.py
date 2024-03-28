@@ -1,2 +1,1 @@
-Query = "Modi"
 Snippet = "snippet"
