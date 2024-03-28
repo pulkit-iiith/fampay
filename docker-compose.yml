@@ -12,7 +12,7 @@ services:
     environment:
       - YOUTUBE_API_BASE_URL=https://www.googleapis.com/youtube/v3/search
       - API_KEY=AIzaSyCWwKUkm6ENnEEao3agXpteS9UBWRkv41w
-      - BACK_UP_API_KEY=AIzaSyB2qJK3vjvKE-Egpbrs0IXFX5A3lMm3MpI
+      - BACK_UP_API_KEY=AIzaSyBWmLz7Yd5GOjddPyf-IhyCUTGMTu_nvEM
       - QUERY = modi
       - MYSQL_HOST=mysql
       - MYSQL_USER=admin
